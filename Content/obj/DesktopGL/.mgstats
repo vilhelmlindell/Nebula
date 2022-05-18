@@ -1,0 +1,3 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Dev/MonoGame/Nebula/Content/Assets/Fonts/Font.spritefont","C:/Dev/MonoGame/Nebula/Content/bin/DesktopGL/Assets/Fonts/Font.xnb","FontDescriptionProcessor","SpriteFontContent",2008,21538,0,6494854
+"C:/Dev/MonoGame/Nebula/Content/Assets/Sprites/ItemFrame.png","C:/Dev/MonoGame/Nebula/Content/bin/DesktopGL/Assets/Sprites/ItemFrame.xnb","TextureProcessor","Texture2DContent",244,4181,0,3724101

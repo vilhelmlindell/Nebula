@@ -5,7 +5,7 @@ using Nebula.Engine.Graphics;
 
 namespace Nebula.Engine.Components
 {
-    public class SpriteRenderer : Component, IDraweable
+    public class SpriteRenderer : Component
     {
         public Sprite Sprite;
         public Vector2 Origin = Vector2.Zero;
@@ -21,14 +21,18 @@ namespace Nebula.Engine.Components
             Sprite = new Sprite(texture);
         }
 
-        public override void Init()
+        public override void Initialize()
         {
             transform = Parent.GetComponent<Transform>();
         }   
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Sprite.Texture, transform.Position, Sprite.SourceRectangle, Sprite.Color,
-                             transform.Rotation, Origin, transform.Size, Sprite.SpriteEffect, Sprite.Layer);
+            if (Camera.Main != null)
+                spriteBatch.Draw(Sprite.Texture, Vector2.Transform(transform.Position, Camera.Main.TransformMatrix), Sprite.SourceRectangle, 
+                                 Sprite.Color, transform.Rotation, Origin, transform.Size, Sprite.SpriteEffect, Sprite.Layer);
+            else
+                spriteBatch.Draw(Sprite.Texture, transform.Position, Sprite.SourceRectangle, Sprite.Color, 
+                                 transform.Rotation, Origin, transform.Size, Sprite.SpriteEffect, Sprite.Layer);
         }
     }
 }

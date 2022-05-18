@@ -15,8 +15,8 @@ namespace Nebula.Engine
             mouseState = Mouse.GetState();
         }
 
-        public static Vector2 MousePos => new Vector2(mouseState.X, mouseState.Y);
-        public static Vector2 PrevMousePos => new Vector2(prevMouseState.X, prevMouseState.Y);
+        public static Vector2 MousePosition => new Vector2(mouseState.X, mouseState.Y);
+        public static Vector2 PrevMousePosition => new Vector2(prevMouseState.X, prevMouseState.Y);
 
         public static void Update()
         {

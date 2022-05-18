@@ -3,7 +3,7 @@ using Nebula.Engine.Collisions;
 
 namespace Nebula.Engine.Components
 {
-    public class PhysicsBody : Component, IUpdateable
+    public class PhysicsBody : Component
     {
         public Vector2 Velocity;
         private Transform transform;
@@ -15,13 +15,12 @@ namespace Nebula.Engine.Components
             this.collisionHandler = collisionHandler;
         }
 
-        public override void Init()
+        public override void Initialize()
         {
             transform = Parent.GetComponent<Transform>();
             boxCollider = Parent.GetComponent<BoxCollider>();
         }
-
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             bool hasCollider = boxCollider != null;
             transform.Position.X += Velocity.X;

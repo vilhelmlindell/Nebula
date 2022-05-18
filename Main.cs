@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using Nebula.Engine;
 
 namespace Nebula
@@ -8,16 +8,18 @@ namespace Nebula
     public class Main : Game
     {
         private SpriteBatch spriteBatch;
-
+        
         public Main()
         {
+            Directory.SetCurrentDirectory("C:/Dev/MonoGame/Nebula/Content");
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
-        public static GraphicsDeviceManager Graphics { get; private set; }
         public static AssetManager AssetManager { get; private set; }
+        public static GraphicsDeviceManager Graphics { get; private set; }
+        public static GraphicsDevice GraphicsDevice => Graphics.GraphicsDevice;
 
         protected override void Initialize()
         {
@@ -29,7 +31,7 @@ namespace Nebula
             AssetManager = new AssetManager(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            SceneManager.Init();
+            SceneManager.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
@@ -43,9 +45,7 @@ namespace Nebula
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            SceneManager.Draw(spriteBatch, gameTime);
+            SceneManager.Draw(gameTime, spriteBatch);
 
             base.Draw(gameTime);
         }

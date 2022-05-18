@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
 namespace Nebula.Engine
@@ -13,9 +12,9 @@ namespace Nebula.Engine
 
         public ContentManager Content { get; }
 
-        public Texture2D LoadTexture(string assetPath)
+        public T Load<T>(string assetPath)
         {
-            return Content.Load<Texture2D>(assetPath);
+            return Content.Load<T>(assetPath);
         }
 
         public string ReadJson(string assetPath)

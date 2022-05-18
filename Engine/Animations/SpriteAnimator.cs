@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Nebula.Engine.Components;
+﻿using Microsoft.Xna.Framework;
 using Nebula.Engine.Graphics;
 namespace Nebula.Engine.Animations
 {
@@ -15,9 +13,29 @@ namespace Nebula.Engine.Animations
 
         public SpriteAnimator(string assetPath, Sprite sprite)
         {
-            animation = AnimationParser.LoadJson("../../..//Content/" + assetPath);
+            animation = AnimationParser.LoadJson(assetPath);
             this.sprite = sprite;
-            frameIndex = 0;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (currentTag != null)
+            {
+                animationTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (animationTimer > currentFrame.Duration)
+                {
+                    if (frameIndex < currentTag.To)
+                    {
+                        frameIndex++;
+                        ChangeFrame();
+                    }
+                    else
+                    {
+                        frameIndex = currentTag.From;
+                        ChangeFrame();
+                    }
+                }
+            }
         }
 
         public void Play(string tagName)
@@ -41,27 +59,6 @@ namespace Nebula.Engine.Animations
             animationTimer = 0;
             currentFrame = animation.Frames[frameIndex];
             sprite.SourceRectangle = currentFrame.SourceRectangle;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            if (currentTag != null)
-            {
-                animationTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (animationTimer > currentFrame.Duration)
-                {
-                    if (frameIndex < currentTag.To)
-                    {
-                        frameIndex++;
-                        ChangeFrame();
-                    }
-                    else
-                    {
-                        frameIndex = currentTag.From;
-                        ChangeFrame();
-                    }
-                }
-            }
         }
     }
 }

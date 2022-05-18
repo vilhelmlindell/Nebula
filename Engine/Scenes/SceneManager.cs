@@ -8,7 +8,7 @@ namespace Nebula.Engine
 {
     public static class SceneManager
     {
-        public static List<Scene> LoadedScenes = new List<Scene>();
+        public static Scene LoadedScene;
         private static List<Scene> scenes = new List<Scene>();
 
         static SceneManager()
@@ -18,46 +18,31 @@ namespace Nebula.Engine
             LoadScene("Main");
         }
 
+        public static void Initialize()
+        {
+            LoadedScene.Initialize();
+        }
+        public static void Update(GameTime gameTime)
+        {
+            LoadedScene.Update(gameTime);
+        }
+        public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            LoadedScene.Draw(gameTime, spriteBatch);
+        }
+        public static void Unload()
+        {
+            LoadedScene.Unload();
+        }
+
         public static void LoadScene(string name)
         {
             foreach (Scene scene in scenes)
             {
                 if (scene.Name == name)
                 {
-                    LoadedScenes.Add(scene);
+                    LoadedScene = scene;
                 }
-            }
-        }
-        public static void UnloadScene(string name)
-        {
-            foreach (Scene scene in scenes)
-            {
-                if (scene.Name == name)
-                {
-                    LoadedScenes.Remove(scene);
-                }
-            }
-        }
-
-        public static void Init()
-        {
-            foreach (Scene scene in scenes)
-            {
-                scene.Init();
-            }
-        }
-        public static void Update(GameTime gameTime)
-        {
-            foreach (Scene scene in LoadedScenes.ToList())
-            {
-                scene.Update(gameTime);
-            }
-        }
-        public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            foreach (Scene scene in LoadedScenes)
-            {
-                scene.Draw(spriteBatch, gameTime);
             }
         }
     }

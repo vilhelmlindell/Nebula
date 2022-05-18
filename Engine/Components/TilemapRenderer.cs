@@ -4,18 +4,17 @@ using Nebula.Engine.Graphics;
 
 namespace Nebula.Engine.Components
 {
-    public class TilemapRenderer : Component, IUpdateable, IDraweable
+    public class TilemapRenderer : Component
     {
         private Tilemap tilemap;
         private Transform transform;
 
-        public override void Init()
+        public override void Initialize()
         {
             tilemap = Parent.GetComponent<Tilemap>();
             transform = Parent.GetComponent<Transform>();
         }
-
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             foreach (Tile tile in Tiles.TileData.Values)
             {
@@ -25,8 +24,7 @@ namespace Nebula.Engine.Components
                 }
             }
         }
-
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             for (int x = 0; x < tilemap.Width; x++)
             {
@@ -34,9 +32,13 @@ namespace Nebula.Engine.Components
                 {
                     Sprite sprite = Tiles.TileData[tilemap.GetTile(x, y)].Sprite;
                     if (sprite != null)
-                    {
-                        spriteBatch.Draw(sprite.Texture, transform.Position + new Vector2(x * tilemap.GridWidth, y * tilemap.GridHeight),
-                                         sprite.SourceRectangle, sprite.Color, 0f, Vector2.Zero, sprite.Size, sprite.SpriteEffect, sprite.Layer);
+                    { 
+                        if (Camera.Main != null)
+                            spriteBatch.Draw(sprite.Texture, Vector2.Transform(transform.Position + new Vector2(x * tilemap.GridWidth, y * tilemap.GridHeight), Camera.Main.TransformMatrix),
+                                             sprite.SourceRectangle, sprite.Color, 0f, Vector2.Zero, sprite.Scale, sprite.SpriteEffect, sprite.Layer);
+                        else
+                            spriteBatch.Draw(sprite.Texture, transform.Position + new Vector2(x * tilemap.GridWidth, y * tilemap.GridHeight),
+                                             sprite.SourceRectangle, sprite.Color, 0f, Vector2.Zero, sprite.Scale, sprite.SpriteEffect, sprite.Layer);
                     }
                 }
             }

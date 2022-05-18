@@ -29,7 +29,7 @@ namespace Nebula.Engine
             {
                 Sprite = new Sprite("Assets/Sprites/Grass")
                 {
-                    Size = new Vector2(2, 2)
+                    Scale = new Vector2(2, 2)
                 },
                 CollisionType = CollisionType.Solid
             };

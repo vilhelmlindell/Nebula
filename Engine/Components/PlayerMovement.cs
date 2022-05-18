@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Nebula.Engine.Components
 {
-    public class PlayerMovement : Component, IUpdateable
+    public class PlayerMovement : Component
     {
         private readonly float maxVelocityTime = 60;
         private readonly float maxVelocity = 3;
@@ -29,20 +29,19 @@ namespace Nebula.Engine.Components
         private BoxCollider boxCollider;
 
         public PlayerMovement()
-        {
+        {  
             xFriction = 5 / maxVelocityTime;
             xAcceleration = maxVelocity * xFriction;
             jumpTime = jumpWidth / maxVelocity;
             currentMidAirJumps = midAirJumps;
         }
 
-        public override void Init()
+        public override void Initialize()
         {
             body = Parent.GetComponent<PhysicsBody>();
             boxCollider = Parent.GetComponent<BoxCollider>();
         }
-
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (Input.KeyDown(Keys.D))
                 xInput= 1;

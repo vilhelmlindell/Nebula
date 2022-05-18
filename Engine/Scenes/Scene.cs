@@ -7,17 +7,45 @@ using Nebula.Engine.Components;
 
 namespace Nebula.Engine
 {
-    public abstract class Scene
+    public abstract class Scene : IComponent
     {
         public readonly string Name;
         private List<Entity> entities;
-        private bool initialized = false;
 
         public Scene(string name)
         {
             Name = name;
 
             entities = new List<Entity>();
+        }
+
+        public Camera Camera { get; set; }
+
+        public virtual void Initialize()
+        {
+            foreach (Entity entity in entities)
+            {
+                entity.Initialize();
+            }
+        }
+        public virtual void Update(GameTime gameTime)
+        {
+            foreach (Entity entity in entities)
+            {
+                entity.Update(gameTime);
+            }
+        }
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            foreach (Entity entity in entities)
+            {
+                entity.Draw(gameTime, spriteBatch);
+            }
+        }
+        public virtual void Unload()
+        {
+            foreach (Entity entity in entities)
+                entity.Unload();
         }
 
         public void AddEntity(Entity entity)
@@ -45,28 +73,6 @@ namespace Nebula.Engine
                 contains = true;
             }
             return approvedEntities;
-        }
-        public virtual void Init()
-        {
-            foreach (Entity entity in entities)
-            {
-                entity.Init();
-            }
-            initialized = true;
-        }
-        public virtual void Update(GameTime gameTime)
-        {
-            foreach (Entity entity in entities)
-            {
-                entity.Update(gameTime);
-            }
-        }
-        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            foreach (Entity entity in entities)
-            {
-                entity.Draw(spriteBatch, gameTime);
-            }
         }
     }
 }

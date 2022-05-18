@@ -13,14 +13,13 @@ namespace Nebula.Engine
             if (Input.KeyPressed(Keys.Space))
             {
                 SceneManager.LoadScene("Main");
-                SceneManager.UnloadScene("Test");
             }
             base.Update(gameTime);
         }
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            base.Draw(spriteBatch, gameTime);
+            base.Draw(gameTime, spriteBatch);
             spriteBatch.End();
         }
     }

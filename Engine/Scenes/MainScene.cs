@@ -1,7 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nebula.Engine.Collisions;
 using Nebula.Engine.Components;
+using Nebula.Engine.Factories;
+using Nebula.Engine.Graphics;
+using Nebula.Engine.GUI;
 
 namespace Nebula.Engine
 {
@@ -9,53 +13,53 @@ namespace Nebula.Engine
     {
         private Entity player;
         private Entity tilemap;
+        private Entity camera;
         private CollisionHandler collisionHandler;
+        private GUIManager guiManager;
+        private Inventory inventory;
+
+        private Effect effect;
 
         public MainScene(string name) : base(name)
         {
+            guiManager = new GUIManager();
+            effect = Main.AssetManager.Load<Effect>("Assets/Shaders/BasicEffect");
         }
 
-        public override void Init()
+        public override void Initialize()
         {
-            tilemap = new Entity();
+            inventory = new Inventory(10, 5, new Sprite("Assets/Sprites/ItemFrame"));
+            guiManager.Widgets.Add(inventory.Container);
+
+            camera = EntityFactory.CreateCamera();
+            AddEntity(camera);
+
+            tilemap = EntityFactory.CreateTilemap();
             AddEntity(tilemap);
-            tilemap.AddComponent(new Transform());
-            Tilemap tilemapComponent = new Tilemap(32, 32, 16, 16);
-            tilemap.AddComponent(tilemapComponent);
-            tilemap.AddComponent(new TilemapRenderer());
-            for (int x = 0; x < 16; x++)
-            {
-                tilemapComponent.SetTile(x, 14, Tiles.Grass);
-            }
 
-            player = new Entity();
+            player = EntityFactory.CreatePlayer(collisionHandler, tilemap.GetComponent<Tilemap>());
             AddEntity(player);
-            player.AddComponent(new Transform());
-            player.AddComponent(new SpriteRenderer("Assets/Sprites/Slime"));
-            Animator animator = new Animator("Assets/Animations/Slime.json");
-            player.AddComponent(animator);
-            player.AddComponent(new PhysicsBody(collisionHandler));
-            player.AddComponent(new BoxCollider(32, 23, tilemapComponent)
-            {
-                Response = CollisionResponse.Dynamic
-            });
-            player.AddComponent(new PlayerMovement());
 
-            base.Init();
+            base.Initialize();
             collisionHandler = new CollisionHandler(this);
-            animator.Play("Idle");
+            camera.GetComponent<Camera>().Transform = player.GetComponent<Transform>();
+            player.GetComponent<Animator>().Play("Idle");
         }
 
         public override void Update(GameTime gameTime)
         {
             collisionHandler.CheckCollisions();
             base.Update(gameTime);
+
+            guiManager.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            Main.GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            base.Draw(spriteBatch, gameTime);
+            base.Draw(gameTime, spriteBatch);
+            guiManager.Draw(gameTime, spriteBatch);
             spriteBatch.End();
         }
     }

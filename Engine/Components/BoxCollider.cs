@@ -33,12 +33,50 @@ namespace Nebula.Engine.Components
         public bool TouchingCeiling { get; private set; }
         public bool TouchingGround { get; private set; }
 
-        public override void Init()
+        public override void Initialize()
         {
             transform = Parent.GetComponent<Transform>();
             body = Parent.GetComponent<PhysicsBody>();
         }
 
+        public void CheckCollisionsX()
+        {
+            TouchingRight = false;
+            TouchingLeft = false;
+            foreach (RectangleF other in GetCollisions())
+            {
+                if (body.Velocity.X > 0) // Moving right
+                {
+                    transform.Position.X = other.Left - Width;
+                    TouchingRight = true;
+                }
+                else if (body.Velocity.X < 0) // Moving left
+                {
+                    transform.Position.X = other.Right;
+                    TouchingLeft = true;
+                }
+                body.Velocity.X = 0;
+            }
+        }
+        public void CheckCollisionsY()
+        {
+            TouchingCeiling = false;
+            TouchingGround = false;
+            foreach (RectangleF other in GetCollisions())
+            {
+                if (body.Velocity.Y > 0) // Moving down
+                {
+                    transform.Position.Y = other.Top - Height;
+                    TouchingGround = true;
+                }
+                else if (body.Velocity.Y < 0) // Moving up
+                {
+                    transform.Position.Y = other.Bottom;
+                    TouchingCeiling = true;
+                }
+                body.Velocity.Y = 0;
+            }
+        }
         private List<RectangleF> GetCollisions()
         {
             bounds = new RectangleF(transform.Position.X, transform.Position.Y, Width, Height);
@@ -65,46 +103,6 @@ namespace Nebula.Engine.Components
                 }
             }
             return collisions;
-        }
-
-        public void CheckCollisionsX()
-        {
-            TouchingRight = false;
-            TouchingLeft = false;
-            foreach (RectangleF other in GetCollisions())
-            {
-                if (body.Velocity.X > 0) // Moving right
-                {
-                    transform.Position.X = other.Left - Width;
-                    TouchingRight = true;
-                }
-                else if (body.Velocity.X < 0) // Moving left
-                {
-                    transform.Position.X = other.Right;
-                    TouchingLeft = true;
-                }
-                body.Velocity.X = 0;
-            }
-        }
-
-        public void CheckCollisionsY()
-        {
-            TouchingCeiling = false;
-            TouchingGround = false;
-            foreach (RectangleF other in GetCollisions())
-            {
-                if (body.Velocity.Y > 0) // Moving down
-                {
-                    transform.Position.Y = other.Top - Height;
-                    TouchingGround = true;
-                }
-                else if (body.Velocity.Y < 0) // Moving up
-                {
-                    transform.Position.Y = other.Bottom;
-                    TouchingCeiling = true;
-                }
-                body.Velocity.Y = 0;
-            }
         }
     }
 }
